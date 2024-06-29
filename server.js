@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Route to handle GET requests to add new stock
 app.get('/addStock', async (req, res) => {
-  const { machine_id, Stock_Available, Upi_Sold, Coin_Sold } = req.query;
+  const { machine_id, Stock_Available, Upi_Sold, Coin_Sold, mac_id } = req.query;
 
   if (!machine_id || Stock_Available == null || Upi_Sold == null || Coin_Sold == null) {
     return res.status(400).send('All fields are required');
@@ -42,9 +42,9 @@ app.get('/addStock', async (req, res) => {
       existingStock.Upi_Sold = Number(Upi_Sold);
       existingStock.Coin_Sold = Number(Coin_Sold);
       existingStock.lastUpdated = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
-
+      response = 'Stock updated successfully '+existingStock.lastUpdated+ ' for ' + mac_id +":";
       await existingStock.save();
-      res.status(200).send('Stock updated successfully');
+      res.status(200).send(response);
     } else {
       // Create new document
       const newStock = new Stock({
@@ -76,6 +76,16 @@ app.get('/getStock', async (req, res) => {
     res.status(200).json(stockData);
   } catch (err) {
     res.status(500).send('Failed to fetch stock data');
+  }
+});
+
+// Route to fetch information of all available devices
+app.get('/getAllDevices', async (req, res) => {
+  try {
+    const allDevices = await Stock.find(); // Fetch all documents from Stock collection
+    res.status(200).json(allDevices);
+  } catch (err) {
+    res.status(500).send('Failed to fetch devices');
   }
 });
 
