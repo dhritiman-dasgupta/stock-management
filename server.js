@@ -1,9 +1,8 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const moment = require('moment-timezone');
-const cors = require('cors');  // Import the cors package
+const cors = require('cors');
 
 // Load environment variables
 dotenv.config();
@@ -46,7 +45,7 @@ app.get('/addStock', async (req, res) => {
       existingStock.Upi_Sold = Number(Upi_Sold);
       existingStock.Coin_Sold = Number(Coin_Sold);
       existingStock.lastUpdated = moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss');
-      response = 'Stock updated successfully ' + existingStock.lastUpdated + ' for ' + mac_id + ":";
+      const response = 'Stock updated successfully ' + existingStock.lastUpdated + ' for ' + mac_id + ":";
       await existingStock.save();
       res.status(200).send(response);
     } else {
@@ -93,8 +92,8 @@ app.get('/getAllDevices', async (req, res) => {
   }
 });
 
-// Route to handle DELETE requests to delete stock data by machine_id
-app.delete('/deleteStock', async (req, res) => {
+// Route to handle GET requests to delete stock data by machine_id
+app.get('/deleteStock', async (req, res) => {
   const { machine_id } = req.query;
 
   if (!machine_id) {
@@ -122,10 +121,10 @@ app.get('/getStockByDate', async (req, res) => {
 
   let dateQuery = {};
   if (startDate) {
-    dateQuery.$gte = moment(startDate).startOf('day').toDate();
+    dateQuery.$gte = moment(startDate, 'YYYY-MM-DD HH:mm:ss').toDate();
   }
   if (endDate) {
-    dateQuery.$lte = moment(endDate).endOf('day').toDate();
+    dateQuery.$lte = moment(endDate, 'YYYY-MM-DD HH:mm:ss').toDate();
   }
 
   try {
