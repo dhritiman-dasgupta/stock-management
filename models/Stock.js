@@ -8,4 +8,4 @@ const stockSchema = new mongoose.Schema({
   location: { type: String } ,
 });
 
-module.exports = mongoose.model('vendingmachinestockL_', stockSchema);
+module.exports = mongoose.model('stock', stockSchema);
