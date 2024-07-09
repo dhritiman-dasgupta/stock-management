@@ -30,7 +30,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Route to handle GET requests to add new stock
 app.get('/addStock', async (req, res) => {
-  const { machine_id, Stock_Available, Upi_Sold, Coin_Sold, mac_id } = req.query;
+  const { machine_id, Stock_Available, Upi_Sold, Coin_Sold, mac_id, location } = req.query;
 
   if (!machine_id || Stock_Available == null || Upi_Sold == null || Coin_Sold == null) {
     return res.status(400).send('All fields are required');
@@ -55,7 +55,8 @@ app.get('/addStock', async (req, res) => {
         Stock_Available: Number(Stock_Available),
         Upi_Sold: Number(Upi_Sold),
         Coin_Sold: Number(Coin_Sold),
-        lastUpdated: moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss')
+        lastUpdated: moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss'),
+        location: Number(location),
       });
 
       await newStock.save();
