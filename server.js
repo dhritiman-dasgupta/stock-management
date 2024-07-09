@@ -115,7 +115,7 @@ app.get('/getAllDevices', async (req, res) => {
 // Route to handle GET requests to fetch stock data for today
 // Route to handle GET requests to fetch stock data for today
 app.get('/getStockToday', async (req, res) => {
-  const today = moment().format('YYYY-MM-DD');
+  const today = moment().tz('Asia/Kolkata').format('YYYY-MM-DD');
 
   try {
     // Fetch all stock data for today
