@@ -113,14 +113,12 @@ app.get('/deleteStock', async (req, res) => {
 
 // Route to handle GET requests to fetch stock data for today
 app.get('/getStockToday', async (req, res) => {
-  const todayStart = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-  const todayEnd = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+  const today = moment().format('YYYY-MM-DD');
 
   try {
     const stockData = await Stock.find({
       lastUpdated: {
-        $gte: moment(todayStart, 'YYYY-MM-DD HH:mm:ss').toDate(),
-        $lte: moment(todayEnd, 'YYYY-MM-DD HH:mm:ss').toDate()
+        $regex: new RegExp(today)
       }
     });
 
