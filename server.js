@@ -111,28 +111,22 @@ app.get('/deleteStock', async (req, res) => {
   }
 });
 
-// Route to handle GET requests to fetch stock data by date or date range
-app.get('/getStockByDate', async (req, res) => {
-  const { startDate, endDate } = req.query;
-
-  if (!startDate && !endDate) {
-    return res.status(400).send('At least one of startDate or endDate is required');
-  }
-
-  let dateQuery = {};
-  if (startDate) {
-    dateQuery.$gte = moment(startDate, 'YYYY-MM-DD HH:mm:ss').toDate();
-  }
-  if (endDate) {
-    dateQuery.$lte = moment(endDate, 'YYYY-MM-DD HH:mm:ss').toDate();
-  }
+// Route to handle GET requests to fetch stock data for today
+app.get('/getStockToday', async (req, res) => {
+  const todayStart = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+  const todayEnd = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
   try {
     const stockData = await Stock.find({
-      lastUpdated: dateQuery
+      lastUpdated: {
+        $gte: moment(todayStart, 'YYYY-MM-DD HH:mm:ss').toDate(),
+        $lte: moment(todayEnd, 'YYYY-MM-DD HH:mm:ss').toDate()
+      }
     });
+
     res.status(200).json(stockData);
   } catch (err) {
+    console.error('Failed to fetch stock data:', err);
     res.status(500).send('Failed to fetch stock data');
   }
 });
