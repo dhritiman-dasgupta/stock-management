@@ -112,22 +112,46 @@ app.get('/deleteStock', async (req, res) => {
 });
 
 // Route to handle GET requests to fetch stock data for today
+// Route to handle GET requests to fetch stock data for today
 app.get('/getStockToday', async (req, res) => {
   const today = moment().format('YYYY-MM-DD');
 
   try {
+    // Fetch all stock data for today
     const stockData = await Stock.find({
       lastUpdated: {
         $regex: new RegExp(today)
       }
     });
 
-    res.status(200).json(stockData);
+    // Calculate the count of stock entries for today
+    const stockCount = stockData.length;
+
+    // Find the machine with the lowest stock available
+    let lowestStockMachine = null;
+    let lowestStock = Infinity;
+
+    stockData.forEach(stock => {
+      if (stock.Stock_Available < lowestStock) {
+        lowestStock = stock.Stock_Available;
+        lowestStockMachine = stock.machine_id;
+      }
+    });
+
+    // Prepare the response JSON object
+    const response = {
+      count: stockCount,
+      lowestStockMachine: lowestStockMachine,
+      stockData: stockData
+    };
+
+    res.status(200).json(response);
   } catch (err) {
     console.error('Failed to fetch stock data:', err);
     res.status(500).send('Failed to fetch stock data');
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
