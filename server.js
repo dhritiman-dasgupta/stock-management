@@ -56,7 +56,7 @@ app.get('/addStock', async (req, res) => {
         Upi_Sold: Number(Upi_Sold),
         Coin_Sold: Number(Coin_Sold),
         lastUpdated: moment().tz('Asia/Kolkata').format('YYYY-MM-DD HH:mm:ss'),
-        location: location,
+        location,
       });
 
       await newStock.save();
