@@ -93,23 +93,23 @@ app.get('/getAllDevices', async (req, res) => {
 });
 
 // Route to handle GET requests to delete stock data by machine_id
-app.get('/deleteStock', async (req, res) => {
-  const { machine_id } = req.query;
+// app.get('/deleteStock', async (req, res) => {
+//   const { machine_id } = req.query;
 
-  if (!machine_id) {
-    return res.status(400).send('machine_id is required');
-  }
+//   if (!machine_id) {
+//     return res.status(400).send('machine_id is required');
+//   }
 
-  try {
-    const result = await Stock.deleteOne({ machine_id });
-    if (result.deletedCount === 0) {
-      return res.status(404).send('No stock found with the specified machine_id');
-    }
-    res.status(200).send('Stock deleted successfully');
-  } catch (err) {
-    res.status(500).send('Failed to delete stock');
-  }
-});
+//   try {
+//     const result = await Stock.deleteOne({ machine_id });
+//     if (result.deletedCount === 0) {
+//       return res.status(404).send('No stock found with the specified machine_id');
+//     }
+//     res.status(200).send('Stock deleted successfully');
+//   } catch (err) {
+//     res.status(500).send('Failed to delete stock');
+//   }
+// });
 
 // Route to handle GET requests to fetch stock data for today
 // Route to handle GET requests to fetch stock data for today
