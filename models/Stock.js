@@ -4,7 +4,8 @@ const stockSchema = new mongoose.Schema({
   Stock_Available: { type: Number, required: true },
   Upi_Sold: { type: Number, required: true },
   Coin_Sold: { type: Number, required: true },
-  lastUpdated: { type: String, required: true } 
+  lastUpdated: { type: String, required: true },
+  location: { type: String } ,
 });
 
-module.exports = mongoose.model('vendingmachinestock_', stockSchema);
+module.exports = mongoose.model('vendingmachinestockL_', stockSchema);
